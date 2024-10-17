@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <meta name="format-detection" content="telephone=no">
+        <title>SChat</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <link href="/static/chat.css" rel="stylesheet">
+    </head>
+    <body hx-on::history-restore="scrollToBottom(document.getElementById('messages'))">
+        {{block "wrapper" .}}
+            <div id="wrapper" hx-history-elt
+                hx-on::after-settle="scrollToBottom(document.getElementById('messages'))">
+                <div id="channels" hx-boost="true" hx-target="#wrapper" hx-swap="outerHTML" hx-sync="#channels:replace">
+                    {{range .Channels}}
+                        <a {{if .Href}} href="{{.Href}}" {{end}}>{{.Name}}</a>
+                    {{end}}
+                </div>
+                <div id="chat" hx-ext="ws" ws-connect="{{.Ws}}"
+                    hx-on::ws-open="let after = this.querySelector('#messages')
+                                        .lastElementChild?.dataset?.id ?? '-1';
+                                    event.detail.socketWrapper.sendImmediately(
+                                        JSON.stringify({ after }),
+                                    messages);"
+                    hx-on::ws-after-message="scrollToBottom(document.getElementById('messages'))">
+                    {{block "messages" .}}
+                        <ul id="messages" {{if .LiveUpdate}} hx-swap-oob="beforeend" {{end}}>
+                            {{range .Messages}}
+                                <li data-id="{{.Id}}">
+                                    <strong>{{.Username}}</strong>: <span>{{.Msg}}</span>
+                                </li>
+                            {{end}}
+                        </ul>
+                    {{end}}
+                    <form id="send" hx-post="send" hx-on::before-request="this.reset()">
+                        <input type="text" name="msg" placeholder="Message...">
+                        <input type="submit" value="➤">
+                    </form>
+                </div>
+            </div>
+        {{end}}
+        <script>
+            const scrollToBottom = messages => messages.scrollTo(0, messages.scrollHeight)
+            document.addEventListener('DOMContentLoaded', () => scrollToBottom(document.getElementById('messages')))
+        </script>
+        <script src="/static/htmx.js"></script>
+        <script src="/static/htmx-ext-ws.js"></script>
+    </body>
+</html>

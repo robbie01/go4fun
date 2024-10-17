@@ -1,0 +1,149 @@
+:root {
+    font-size: 62.5%;
+    height: 100%;
+    overscroll-behavior: none;
+    --background-color: #f9f9f9;
+    --text-color: #000000;
+    --chat-bg-color: #eee;
+    --message-border-color: #ccc;
+    --send-bg-color: #e0e0e0;
+    --input-bg-color: #fff;
+    --submit-bg-color: #6200ea;
+    --submit-hover-bg-color: #5400ca;
+    --submit-text-color: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: #2d2d2d;
+        --text-color: #ffffff;
+        --chat-bg-color: #1e1e1e;
+        --message-border-color: #444;
+        --send-bg-color: #282828;
+        --input-bg-color: #333;
+    }
+}
+
+body {
+    margin: 0;
+    font-family: 'Raleway', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    height: 100%;
+    font-size: 1.6rem;
+}
+
+#wrapper {
+    height: 100%;
+    display: flex;
+}
+
+#channels {
+    width: 25rem;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 2rem 0 1rem 1rem;
+}
+
+#channels a {
+    position: relative;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-sizing: border-box;
+    text-decoration: none;
+    text-align: right;
+    color: var(--text-color);
+}
+
+#channels a:not([href]) {
+    background: var(--chat-bg-color);
+    border-radius: 1rem 0 0 1rem;
+}
+
+/* fancy inverted border radius */
+#channels a:not([href])::before {
+    content: "";
+    position: absolute;
+    background: transparent;
+    width: 1rem;
+    height: 2rem;
+    top: -2rem;
+    right: 0;
+    border-bottom-right-radius: 1rem;
+    box-shadow: 0 1rem 0 0 var(--chat-bg-color);
+}
+
+#channels a:not([href])::after {
+    content: "";
+    position: absolute;
+    background: transparent;
+    width: 1rem;
+    height: 2rem;
+    bottom: -2rem;
+    right: 0;
+    border-top-right-radius: 1rem;
+    box-shadow: 0 -1rem 0 0 var(--chat-bg-color);
+}
+
+#chat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--chat-bg-color);
+}
+
+#messages {
+    margin: 0;
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    list-style-type: none;
+    /*display: flex;
+    flex-direction: column;
+    justify-content: flex-end;*/
+}
+
+#messages li {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 0.1rem solid var(--message-border-color);
+    font-weight: 400;
+}
+
+#messages li strong {
+    font-weight: 700;
+}
+
+#send {
+    display: flex;
+    padding: 1rem;
+    background-color: var(--send-bg-color);
+}
+
+#send input[type="text"] {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    margin-right: 1rem;
+    background-color: var(--input-bg-color);
+    color: var(--text-color);
+    font: inherit;
+    font-weight: 400;
+}
+
+#send input[type="submit"] {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: var(--submit-bg-color);
+    color: var(--submit-text-color);
+    cursor: pointer;
+    font-weight: 600;
+}
+
+#send input[type="submit"]:hover {
+    background-color: var(--submit-hover-bg-color);
+}
